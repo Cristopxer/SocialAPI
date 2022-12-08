@@ -8,6 +8,8 @@ import morgan from "morgan";
 import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
+import authRoute from "./routes/auth.js";
+import { register } from "./controllers/auth.js";
 
 // MIDDLEWARE CONFIGS
 const __filename = fileURLToPath(import.meta.url);
@@ -35,10 +37,16 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
+// Routes with files
+app.post("/api/v1/auth/register", upload.single("picture"), register);
+
+// Routes
+app.use("/api/v1/auth", authRoute);
+
 // Mongoose configuration
 const PORT = process.env.PORT || 6001;
 mongoose
-  .connect(process.env.MONGO_URL, {    
+  .connect(process.env.MONGO_URL, {
     useUnifiedTopology: true,
   })
   .then(() => {
