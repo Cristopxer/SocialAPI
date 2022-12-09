@@ -5,35 +5,44 @@ import User from "../models/User.js";
 // Register user
 export const register = async (req, res) => {
   try {
-    const {
-      firstName,
-      lastName,
-      email,
-      password,
-      picturePath,
-      friends,
-      location,
-      occupation,
-    } = req.body;
+    // const {
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   password,
+    //   picturePath,
+    //   friends,
+    //   location,
+    //   occupation,
+    // } = req.body;
 
     const salt = await bcrypt.genSalt();
-    const passwordHash = await bcrypt.hash(password, salt);
+    // const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(req.body.password, salt);
 
+    // const newUser = new User({
+    //   firstName,
+    //   lastName,
+    //   email,
+    //   password: passwordHash,
+    //   picturePath,
+    //   friends,
+    //   location,
+    //   occupation,
+    //   viewedProfile: Math.floor(Math.random() * 10000),
+    //   impressions: Math.floor(Math.random() * 10000),
+    // });
     const newUser = new User({
-      firstName,
-      lastName,
-      email,
+      ...req.body,
       password: passwordHash,
-      picturePath,
-      friends,
-      location,
-      occupation,
       viewedProfile: Math.floor(Math.random() * 10000),
       impressions: Math.floor(Math.random() * 10000),
     });
     const savedUser = await newUser.save();
-    delete savedUser.password;
-    return res.status(201).json(savedUser);
+    // delete savedUser.password;
+    // return res.status(201).json(savedUser);
+    const { password, ...user } = newUser._doc;
+    return res.status(201).json({...user});
   } catch (err) {
     return res.status(500).json({ error: err.message });
   }
