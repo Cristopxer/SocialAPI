@@ -13,7 +13,10 @@ import userRoutes from "./routes/users.js";
 import postsRoutes from "./routes/posts.js";
 import { register } from "./controllers/auth.js";
 import { verifyToken } from "./middleware/auth.js";
-import {createPost} from "./controllers/posts.js"
+import { createPost } from "./controllers/posts.js";
+// import User from "./models/User.js";
+// import Post from "./models/Posts.js";
+// import { users, posts } from "./data/index.js";
 
 // MIDDLEWARE CONFIGS
 const __filename = fileURLToPath(import.meta.url);
@@ -58,5 +61,8 @@ mongoose
   })
   .then(() => {
     app.listen(PORT, () => console.log(`SERVER RUNNING ON PORT ${PORT}`));
+
+    // User.insertMany(users);
+    // Post.insertMany(posts);
   })
   .catch((error) => console.log(`${error} did not connect`));
