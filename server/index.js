@@ -9,7 +9,11 @@ import path from "path";
 import multer from "multer";
 import { fileURLToPath } from "url";
 import authRoute from "./routes/auth.js";
+import userRoutes from "./routes/users.js";
+import postsRoutes from "./routes/posts.js";
 import { register } from "./controllers/auth.js";
+import { verifyToken } from "./middleware/auth.js";
+import {createPost} from "./controllers/posts.js"
 
 // MIDDLEWARE CONFIGS
 const __filename = fileURLToPath(import.meta.url);
@@ -39,9 +43,12 @@ const upload = multer({ storage });
 
 // Routes with files
 app.post("/api/v1/auth/register", upload.single("picture"), register);
+app.post("/api/v1/posts", verifyToken, upload.single("picture"), createPost);
 
 // Routes
 app.use("/api/v1/auth", authRoute);
+app.use("/api/v1/users", userRoutes);
+app.use("/api/v1/posts", postRoutes);
 
 // Mongoose configuration
 const PORT = process.env.PORT || 6001;
